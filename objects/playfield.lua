@@ -50,21 +50,32 @@ end
 
 function Playfield:detectClick(x,y)
     if self:isWithinBounds(push:toGame(x,y)) then
-        print("Clicked within bounds")
-        for col = 1,table.maxn(self.matrix)
+        -- print("Clicked within bounds")
+        for col = 1,table.maxn(self.matrix[1])
         do
-            for row = 1,table.maxn(self.matrix[1])
+            for row = 1,table.maxn(self.matrix)
             do
-                print("Col: " .. col .. " Row: " .. row .. " x start: " .. self.offsetx + (col * self.tileWidth) .. " y start " .. self.offsety + (row * self.tileHeight))
-                -- Calculate within here if click lands in this tile
+                xStart = self.offsetx + ((col - 1) * self.tileWidth)
+                yStart = self.offsety + ((row - 1) * self.tileHeight)
+                -- print("Col: " .. col .. " Row: " .. row .. " x start: " .. xStart .. " y start " .. yStart)
+                if self:isClickWithinTile(xStart, yStart, push:toGame(x,y)) then
+                    -- print("Col: " .. col .. " Row: " .. row .. " clicked!")
+                    self.matrix[row][col] = 3
+                end
             end
         end
     else
-        print("Out of bounds")
+        -- print("Out of bounds")
     end
 end
 
-
+function Playfield:isClickWithinTile(tileX, tileY, userX, userY)
+    if userX < tileX then return false end
+    if userX > tileX + self.tileWidth then return false end
+    if userY < tileY then return false end
+    if userY > tileY + self.tileWidth then return false end
+    return true
+end
 
 -- function renderIsometricPlayfield(self)
 --     iOffsetx = 150
