@@ -50,22 +50,17 @@ end
 
 function Playfield:detectClick(x,y)
     if self:isWithinBounds(push:toGame(x,y)) then
-        -- print("Clicked within bounds")
         for col = 1,table.maxn(self.matrix[1])
         do
             for row = 1,table.maxn(self.matrix)
             do
                 xStart = self.offsetx + ((col - 1) * self.tileWidth)
                 yStart = self.offsety + ((row - 1) * self.tileHeight)
-                -- print("Col: " .. col .. " Row: " .. row .. " x start: " .. xStart .. " y start " .. yStart)
                 if self:isClickWithinTile(xStart, yStart, push:toGame(x,y)) then
-                    -- print("Col: " .. col .. " Row: " .. row .. " clicked!")
-                    self.matrix[row][col] = 3
+                    self.matrix[row][col] = selectedTile
                 end
             end
         end
-    else
-        -- print("Out of bounds")
     end
 end
 
