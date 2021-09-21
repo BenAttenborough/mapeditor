@@ -2,10 +2,12 @@ PlayState = Class{__includes = BaseState}
 
 require 'objects.playfield'
 require 'objects.ui'
+require 'objects.debug'
 
 function PlayState:init()
     playfield = Playfield()
     ui = UI()
+    debug = Debug()
     selectedTile = 2
 end
 
@@ -21,6 +23,7 @@ end
 function PlayState:render()
     playfield:render()
     ui:render()
+    debug:render()
 end
 
 function PlayState:exit() end
