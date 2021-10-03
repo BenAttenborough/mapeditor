@@ -19,6 +19,7 @@ function Playfield:init()
     self.offsety = 50
     self.tileWidth = 15
     self.tileHeight = 15
+    self.hoveredTile = {0,0}
 end
 
 function Playfield:render()
@@ -33,11 +34,22 @@ function Playfield:render()
             elseif self.matrix[x][y] == 3 then tile = self.tileWater
             else tile = self.tileGrass end
             love.graphics.draw(tile, offsetx, offsety)
+            r, g, b, a = love.graphics.getColor( )
+            -- love.graphics.setColor(0,0,0)
+            -- love.graphics.setColor(r, g, b, a)
+            -- love.graphics.rectangle("line", offsetx, offsety, self.tileWidth, self.tileHeight)
+            if x == self.hoveredTile[1] and y == self.hoveredTile[2] then
+                r, g, b, a = love.graphics.getColor( )
+                love.graphics.setColor(1,1,1)
+                love.graphics.rectangle("line", offsetx, offsety, self.tileWidth, self.tileHeight)
+                -- love.graphics.setColor(r, g, b, a)
+            end
             offsetx = offsetx + self.tileWidth
         end
         offsetx = 150
         offsety = offsety + self.tileHeight
     end
+    
 end
 
 function Playfield:isWithinBounds(x,y)
@@ -56,7 +68,7 @@ function Playfield:detectClick(x,y)
             do
                 xStart = self.offsetx + ((col - 1) * self.tileWidth)
                 yStart = self.offsety + ((row - 1) * self.tileHeight)
-                if self:isClickWithinTile(xStart, yStart, push:toGame(x,y)) then
+                if self:isWithinTile(xStart, yStart, push:toGame(x,y)) then
                     self.matrix[row][col] = selectedTile
                 end
             end
@@ -64,12 +76,31 @@ function Playfield:detectClick(x,y)
     end
 end
 
-function Playfield:isClickWithinTile(tileX, tileY, userX, userY)
+function Playfield:isWithinTile(tileX, tileY, userX, userY)
     if userX < tileX then return false end
     if userX > tileX + self.tileWidth then return false end
     if userY < tileY then return false end
     if userY > tileY + self.tileWidth then return false end
     return true
+end
+
+function Playfield:detectMousePos(x, y)
+    -- print("X: " .. x .. " Y: " .. y)
+    if self:isWithinBounds(push:toGame(x,y)) then
+        for col = 1,table.maxn(self.matrix[1])
+        do
+            for row = 1,table.maxn(self.matrix)
+            do
+                xStart = self.offsetx + ((col - 1) * self.tileWidth)
+                yStart = self.offsety + ((row - 1) * self.tileHeight)
+                if self:isWithinTile(xStart, yStart, push:toGame(x,y)) then
+                    -- self.matrix[row][col] = selectedTile
+                    print("Tile row: " .. row .. " col: " .. col)
+                    self.hoveredTile = {row, col}
+                end
+            end
+        end
+    end
 end
 
 -- function renderIsometricPlayfield(self)

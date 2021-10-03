@@ -25,15 +25,15 @@ end
 
 function UI:detectClick(x,y)
     if self:isClickWithinTile(20, 50, push:toGame(x,y)) then
-        print("Grass selected")
+        -- print("Grass selected")
         selectedTile = 1
     end
     if self:isClickWithinTile(20, 70, push:toGame(x,y)) then
-        print("Dirt selected")
+        -- print("Dirt selected")
         selectedTile = 2
     end
     if self:isClickWithinTile(20, 90, push:toGame(x,y)) then
-        print("Water selected")
+        -- print("Water selected")
         selectedTile = 3
     end
 end
