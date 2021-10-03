@@ -5,7 +5,7 @@ require 'objects.ui'
 require 'objects.debug'
 
 function PlayState:init()
-    playfield = Playfield()
+    playfield = Playfield("ISO")
     ui = UI()
     debug = Debug()
     selectedTile = 2
@@ -20,7 +20,7 @@ function PlayState:update(dt)
 end
 
 function PlayState:render()
-    playfield:render()
+    playfield:renderIsometricPlayfield()
     ui:render()
     debug:render()
 end

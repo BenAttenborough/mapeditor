@@ -1,9 +1,15 @@
 Playfield = Class{}
 
-function Playfield:init()
-    self.tileGrass = love.graphics.newImage('sprites/sqa-grass.png')
-    self.tileDirt = love.graphics.newImage('sprites/sqa-dirt.png')
-    self.tileWater = love.graphics.newImage('sprites/sqa-water.png')
+function Playfield:init(mode)
+    if mode == "ISO" then
+        self.tileGrass = love.graphics.newImage('sprites/iso/grass.png')
+        self.tileDirt = love.graphics.newImage('sprites/iso/dirt.png')
+        self.tileWater = love.graphics.newImage('sprites/iso/water.png')
+    else
+        self.tileGrass = love.graphics.newImage('sprites/sqa-grass.png')
+        self.tileDirt = love.graphics.newImage('sprites/sqa-dirt.png')
+        self.tileWater = love.graphics.newImage('sprites/sqa-water.png')
+    end
     self.row1 = {1,1,1,2,2,3,1,3,2,3,1,1}
     self.row2 = {1,2,3,2,2,3,1,3,1,3,1,1}
     self.row3 = {1,1,3,2,2,3,1,1,1,1,1,1}
@@ -17,9 +23,15 @@ function Playfield:init()
     self.matrix[5] = self.row5
     self.offsetx = 150
     self.offsety = 50
-    self.tileWidth = 15
-    self.tileHeight = 15
+    if mode == "ISO" then
+        self.tileWidth = 40
+        self.tileHeight = 20
+    else
+        self.tileWidth = 15
+        self.tileHeight = 15
+    end
     self.hoveredTile = {0,0}
+    self.mode = mode
 end
 
 function Playfield:render()
@@ -103,26 +115,29 @@ function Playfield:detectMousePos(x, y)
     end
 end
 
--- function renderIsometricPlayfield(self)
---     iOffsetx = 150
---     iOffsety = 50
---     offsetx = iOffsetx
---     offsety = iOffsety
---     tile = self.tileGrass
---     for x = 1,table.maxn(self.matrix)
---     do
---         for y = 1,table.maxn(self.matrix[1])
---         do
---             if self.matrix[x][y] == 2 then tile = self.tileDirt 
---             elseif self.matrix[x][y] == 3 then tile = self.tileWater
---             else tile = self.tileGrass end
---             self:draw(tile, offsetx, offsety)
---             offsetx = offsetx + 7
---             offsety = offsety + 7
---         end
---         offsetx = iOffsetx 
---         offsety = iOffsety
---         offsetx = offsetx - (7 * x)
---         offsety = offsety + (7 * x)
---     end
--- end
+function Playfield:renderIsometricPlayfield()
+    love.graphics.print("Mode: " .. self.mode, 10, 20)
+    iOffsetx = 150
+    iOffsety = 50
+    offsetx = iOffsetx
+    offsety = iOffsety
+    titleOffsetx = self.tileWidth / 2
+    titleOffsety = self.tileHeight / 2
+    tile = self.tileGrass
+    for x = 1,table.maxn(self.matrix)
+    do
+        for y = 1,table.maxn(self.matrix[1])
+        do
+            if self.matrix[x][y] == 2 then tile = self.tileDirt 
+            elseif self.matrix[x][y] == 3 then tile = self.tileWater
+            else tile = self.tileGrass end
+            love.graphics.draw(tile, offsetx, offsety)
+            offsetx = offsetx + titleOffsetx
+            offsety = offsety + titleOffsety
+        end
+        offsetx = iOffsetx 
+        offsety = iOffsety
+        offsetx = offsetx - (titleOffsetx * x)
+        offsety = offsety + (titleOffsety * x)
+    end
+end
